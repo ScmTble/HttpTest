@@ -65,12 +65,13 @@ class Stats:
         if(url == ""):
             QMessageBox.critical(self.ui,'错误','url为空！')
         elif(not bool(data)):
-            self.clear() #清除之前的内容
+            #清除之前的内容
             self.clearre()
             re,code = self.re_text(url,method)
             if(code):
                 self.ui.retext.insertPlainText(re.text)
         elif(bool(data)):
+            self.clearre()
             re,code = self.re_textpar(url,method,data)
             self.ui.retext.insertPlainText(re.text)
 
@@ -78,44 +79,25 @@ class Stats:
 
     #发送请求（不带参数的）返回获取的响应
     def re_text(self,ul,met):
-        if(met == "GET"):
-            try:
-                result = requests.get(ul)
-                result.encoding = 'utf-8'
-                return result,True
-            except:
-                QMessageBox.critical(self.ui,'错误','请求出错！')
-                return "",False
-
-        else:
-            try:
-                result = requests.post(ul)
-                result.encoding = 'utf-8'
-                return result
-            except:
-                QMessageBox.critical(self.ui,'错误','请求出错！')
-                return "",False
+        try:
+            result = requests.request(met,ul)
+            result.encoding = 'utf-8'
+            return result,True
+        except:
+            QMessageBox.critical(self.ui,'错误','请求出错！')
+            return "",False
     
 
 
     #发送请求（带参数的）返回获取的响应
     def re_textpar(self,ul,met,data):
-        if(met == "GET"):
-            try:
-                result = requests.get(ul,params=data)
-                result.encoding = 'utf-8'
-                return result,True
-            except:
-                QMessageBox.critical(self.ui,'错误','请求出错！')
-                return "",False
-        else:
-            try:
-                result = requests.get(ul,params=data)
-                result.encoding = 'utf-8'
-                return result
-            except:
-                QMessageBox.critical(self.ui,'错误','请求出错！')
-                return "",False
+        try:
+            result = requests.request(met,ul,params=data)
+            result.encoding = 'utf-8'
+            return result,True
+        except:
+            QMessageBox.critical(self.ui,'错误','请求出错！')
+            return "",False
 
 
     # 获取参数并返回字典类型
