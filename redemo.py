@@ -80,7 +80,7 @@ class Stats:
     #发送请求（不带参数的）返回获取的响应
     def re_text(self,ul,met):
         try:
-            result = requests.request(met,ul)
+            result = requests.request(met,ul,timeout=5)
             result.encoding = 'utf-8'
             return result,True
         except:
@@ -90,14 +90,23 @@ class Stats:
 
 
     #发送请求（带参数的）返回获取的响应
-    def re_textpar(self,ul,met,data):
-        try:
-            result = requests.request(met,ul,params=data)
-            result.encoding = 'utf-8'
-            return result,True
-        except:
-            QMessageBox.critical(self.ui,'错误','请求出错！')
-            return "",False
+    def re_textpar(self,ul,met,datap):
+        if met=="GET":
+            try:
+                result = requests.request(met,ul,params=datap,timeout=5)
+                result.encoding = 'utf-8'
+                return result,True
+            except:
+                QMessageBox.critical(self.ui,'错误','请求出错！')
+                return "",False
+        elif met=="POST":
+            try:
+                result = requests.request(met,ul,data=datap,timeout=5)
+                result.encoding = 'utf-8'
+                return result,True
+            except:
+                QMessageBox.critical(self.ui,'错误','请求出错！')
+                return "",False
 
 
     # 获取参数并返回字典类型
